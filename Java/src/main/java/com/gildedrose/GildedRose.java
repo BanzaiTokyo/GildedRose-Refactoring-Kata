@@ -1,9 +1,10 @@
 package com.gildedrose;
 
+import com.gildedrose.inventory.AgedBrie;
+import com.gildedrose.inventory.BackstagePass;
+import com.gildedrose.inventory.Sulfuras;
+
 class GildedRose {
-    public static final String AGED_BRIE = "Aged Brie";
-    public static final String BACKSTAGE = "Backstage passes to a TAFKAL80ETC concert";
-    public static final String SULFURAS = "Sulfuras, Hand of Ragnaros";
     Item[] items;
 
     public GildedRose(Item[] items) {
@@ -17,39 +18,46 @@ class GildedRose {
     }
 
     private static void updateItem(Item item) {
-        if (item.name.equals(AGED_BRIE) || item.name.equals(BACKSTAGE)) {
+        if (!item.name.equals(Sulfuras.NAME)) {
+            decreaseSellIn(item);
+        }
+        updateQuality(item);
+    }
+
+
+    private static void updateQuality(Item item) {
+        if (item.name.equals(AgedBrie.NAME) || item.name.equals(BackstagePass.NAME)) {
             if (item.quality < 50) {
                 increaseQuality(item);
 
-                if (item.name.equals(BACKSTAGE)) {
-                    if (item.sellIn <= 10 && item.quality < 50) {
+                if (item.name.equals(BackstagePass.NAME)) {
+                    if (item.sellIn < 10 && item.quality < 50) {
                         increaseQuality(item);
                     }
 
-                    if (item.sellIn <= 5 && item.quality < 50) {
+                    if (item.sellIn < 5 && item.quality < 50) {
                         increaseQuality(item);
                     }
                 }
             }
-        } else if (!item.name.equals(SULFURAS) && item.quality > 0) {
+        } else if (!item.name.equals(Sulfuras.NAME) && item.quality > 0) {
             decreaseQuality(item);
         }
-        if (!item.name.equals(SULFURAS)) {
-            decreaseSellIn(item);
-        }
+
 
 
         if (item.sellIn < 0) {
-            if (item.name.equals(AGED_BRIE)) {
+            if (item.name.equals(AgedBrie.NAME)) {
                 if (item.quality < 50) {
                     increaseQuality(item);
                 }
-            } else if (item.name.equals(BACKSTAGE)) {
+            } else if (item.name.equals(BackstagePass.NAME)) {
                 item.quality = 0;
-            } else if (item.quality > 0 && !item.name.equals(SULFURAS)) {
+            } else if (item.quality > 0 && !item.name.equals(Sulfuras.NAME)) {
                 decreaseQuality(item);
             }
         }
+
     }
 
     private static void decreaseSellIn(Item item) {
