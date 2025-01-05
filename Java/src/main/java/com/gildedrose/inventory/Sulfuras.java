@@ -9,4 +9,19 @@ public class Sulfuras extends InventoryItem {
         super();
         this.item = item;
     }
+
+    @Override
+    protected void decreaseSellIn() {
+        // Do nothing
+    }
+
+    @Override
+    protected void decreaseQuality() {
+        // Do nothing
+    }
+
+    @Override
+    protected void increaseQuality() {
+        // Do nothing
+    }
 }

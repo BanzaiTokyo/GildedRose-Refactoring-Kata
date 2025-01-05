@@ -2,7 +2,7 @@ package com.gildedrose.inventory;
 
 import com.gildedrose.Item;
 
-public class InventoryItem {
+public abstract class InventoryItem {
     protected Item item;
 
     public static InventoryItem create(Item item) {
@@ -19,19 +19,15 @@ public class InventoryItem {
     }
 
     public void updateItem() {
-        if (!this.item.name.equals(Sulfuras.NAME)) {
-            decreaseSellIn();
-        }
+        decreaseSellIn();
         updateQuality();
         updateExpired();
     }
 
-    private void updateExpired() {
+    protected void updateExpired() {
         if (item.sellIn < 0) {
             if (item.name.equals(AgedBrie.NAME)) {
-                if (item.quality < 50) {
-                    increaseQuality();
-                }
+                increaseQuality();
             } else if (item.name.equals(BackstagePass.NAME)) {
                 item.quality = 0;
             } else if (item.quality > 0 && !item.name.equals(Sulfuras.NAME)) {
@@ -40,36 +36,35 @@ public class InventoryItem {
         }
     }
 
-    private void updateQuality() {
+    protected void updateQuality() {
         if (item.name.equals(AgedBrie.NAME) || item.name.equals(BackstagePass.NAME)) {
-            if (item.quality < 50) {
-                increaseQuality();
+            increaseQuality();
 
-                if (item.name.equals(BackstagePass.NAME)) {
-                    if (item.sellIn < 10 && item.quality < 50) {
-                        increaseQuality();
-                    }
+            if (item.name.equals(BackstagePass.NAME)) {
+                if (item.sellIn < 10) {
+                    increaseQuality();
+                }
 
-                    if (item.sellIn < 5 && item.quality < 50) {
-                        increaseQuality();
-                    }
+                if (item.sellIn < 5) {
+                    increaseQuality();
                 }
             }
-        } else if (!item.name.equals(Sulfuras.NAME) && item.quality > 0) {
+        } else if (item.quality > 0) {
             decreaseQuality();
         }
     }
 
-    private  void decreaseSellIn() {
+    protected void decreaseSellIn() {
         item.sellIn = item.sellIn - 1;
     }
 
-    private  void decreaseQuality() {
+    protected void decreaseQuality() {
         item.quality -= 1;
     }
 
-    private  void increaseQuality() {
-        item.quality += 1;
+    protected void increaseQuality() {
+        if (item.quality < 50) {
+            item.quality += 1;
+        }
     }
-
 }
