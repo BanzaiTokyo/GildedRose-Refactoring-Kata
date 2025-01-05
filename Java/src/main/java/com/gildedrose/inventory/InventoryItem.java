@@ -21,37 +21,21 @@ public abstract class InventoryItem {
     public void updateItem() {
         decreaseSellIn();
         updateQuality();
-        updateExpired();
+        if (isExpired()) {
+            updateExpired();
+        }
+    }
+
+    private boolean isExpired() {
+        return item.sellIn < 0;
     }
 
     protected void updateExpired() {
-        if (item.sellIn < 0) {
-            if (item.name.equals(AgedBrie.NAME)) {
-                increaseQuality();
-            } else if (item.name.equals(BackstagePass.NAME)) {
-                item.quality = 0;
-            } else if (item.quality > 0 && !item.name.equals(Sulfuras.NAME)) {
-                decreaseQuality();
-            }
-        }
+        decreaseQuality();
     }
 
     protected void updateQuality() {
-        if (item.name.equals(AgedBrie.NAME) || item.name.equals(BackstagePass.NAME)) {
-            increaseQuality();
-
-            if (item.name.equals(BackstagePass.NAME)) {
-                if (item.sellIn < 10) {
-                    increaseQuality();
-                }
-
-                if (item.sellIn < 5) {
-                    increaseQuality();
-                }
-            }
-        } else if (item.quality > 0) {
-            decreaseQuality();
-        }
+        decreaseQuality();
     }
 
     protected void decreaseSellIn() {
@@ -59,7 +43,9 @@ public abstract class InventoryItem {
     }
 
     protected void decreaseQuality() {
-        item.quality -= 1;
+        if (item.quality > 0) {
+            item.quality -= 1;
+        }
     }
 
     protected void increaseQuality() {

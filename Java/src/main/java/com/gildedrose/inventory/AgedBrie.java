@@ -9,4 +9,14 @@ public class AgedBrie extends InventoryItem {
         super();
         this.item = item;
     }
+
+    @Override
+    protected void updateQuality() {
+        increaseQuality();
+    }
+
+    @Override
+    protected void updateExpired() {
+        increaseQuality();
+    }
 }
