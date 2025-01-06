@@ -13,6 +13,8 @@ public abstract class InventoryItem {
                 return new BackstagePass(item);
             case Sulfuras.NAME:
                 return new Sulfuras(item);
+            case Conjured.NAME:
+                return new Conjured(item);
             default:
                 return new StandardItem(item);
         }
